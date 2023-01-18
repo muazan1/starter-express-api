@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 
 const Routes = require('./routes/index')
-const ReportRoutes = require('./routes/reports/index')
+// const ReportRoutes = require('./routes/reports/index')
 const TokenRoutes = require('./routes/crypto/index')
 const NewsLetterRoutes = require('./routes/newsletter/index')
 
