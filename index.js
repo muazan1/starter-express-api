@@ -19,7 +19,7 @@ const TokenRoutes = require('./routes/crypto/index')
 const NewsLetterRoutes = require('./routes/newsletter/index')
 
 app.use('/', Routes)
-app.use(`${process.env.API_URL}/reports`, ReportRoutes)
+// app.use(`${process.env.API_URL}/reports`, ReportRoutes)
 app.use(`${process.env.API_URL}/crypto_tokens`, TokenRoutes)
 app.use(`${process.env.API_URL}/news-letters`, NewsLetterRoutes)
 
