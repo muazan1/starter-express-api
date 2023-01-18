@@ -3,7 +3,7 @@ const Router = express.Router()
 
 const { check, validationResult } = require('express-validator');
 
-var Report = require('../models/Report')
+var Report = require('../models/report')
 var nodemailer = require('nodemailer')
 
 // CREATE NEW REPORT

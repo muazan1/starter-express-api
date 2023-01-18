@@ -10,5 +10,4 @@ var ReportSchema = new mongoose.Schema({
 })
 
 
-var Report = mongoose.model("Report", ReportSchema)
-module.exports = Report
+module.exports = mongoose.model("Report", ReportSchema)
