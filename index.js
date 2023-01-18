@@ -17,13 +17,12 @@ const express = require('express')
 const app = express()
 const port = process.env.APP_LISTEN_PORT || 3333
 
-const compression = reqiure('compression')
 // const cors = require('cors')
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 app.use(bodyParser.json());
-app.use(compression())
+
 
 const Routes = require('./routes/index')
 const ReportRoutes = require('./routes/Reports/index')
