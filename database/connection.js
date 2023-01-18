@@ -7,7 +7,7 @@ const connectionParams = {
     useUnifiedTopology: true
 }
 
-const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.h9jwgyt.mongodb.net/?retryWrites=true&w=majority`
+const url = `mongodb+srv://muazan:1LW6RXNud6bQeULW@cluster0.h9jwgyt.mongodb.net/?retryWrites=true&w=majority`
 
 mongoose.set("strictQuery", false);
 
