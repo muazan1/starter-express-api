@@ -1,14 +1,3 @@
-// const express = require('express')
-// const app = express()
-
-// app.all('/', (req, res) => {
-//     console.log("Just got a request!")
-//     res.send('Yo!')
-// })
-
-// app.listen(process.env.APP_LISTEN_PORT || 3000)
-
-
 require('dotenv').config()
 console.log('App is Running')
 require('./database/connection')
