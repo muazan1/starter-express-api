@@ -8,7 +8,7 @@ const port = process.env.APP_LISTEN_PORT || 8080
 const bodyParser = require('body-parser')
 
 var Routes = require('./routes/index')
-var ReportRoutes = require('./routes/reports/index')
+var ReportRoutes = require('./routes/reports')
 // var TokenRoutes = require('./routes/crypto/index')
 // var NewsLetterRoutes = require('./routes/newsletter/index')
 
