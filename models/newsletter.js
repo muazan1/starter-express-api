@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const NewletterSchema = new mongoose.Schema({
+var NewletterSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     created: { type: Date, default: Date.now() },
     updated: { type: Date, default: Date.now() },
