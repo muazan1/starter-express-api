@@ -12,13 +12,9 @@ var ReportRoutes = require('./routes/reports')
 var TokenRoutes = require('./routes/crypto')
 var NewsLetterRoutes = require('./routes/newletter')
 
-console.log('Routes')
 app.use('/', Routes)
-// console.log('ReportRoutes')
 app.use(`/api/v1/reports`, ReportRoutes)
-// console.log('TokenRoutes')
 app.use(`/api/v1/crypto_tokens`, TokenRoutes)
-// console.log('NewsLetterRoutes')
 app.use(`/api/v1/news-letters`, NewsLetterRoutes)
 
 const cors = require('cors');
