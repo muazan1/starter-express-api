@@ -4,23 +4,24 @@ require('./database/connection')
 
 const express = require('express')
 const app = express()
-const port = process.env.APP_LISTEN_PORT || 3333
-
-// const cors = require('cors')
-
+const port = process.env.APP_LISTEN_PORT || 8080
 const bodyParser = require('body-parser')
+const Routes = require('./routes/index')
+const ReportRoutes = require('./routes/reports/index')
+const TokenRoutes = require('./routes/crypto/index')
+
+
+const NewsLetterRoutes = require('./routes/newsletter/index')
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 app.use(bodyParser.json());
 
-
-const Routes = require('./routes/index')
-// const ReportRoutes = require('./routes/reports/index')
-const TokenRoutes = require('./routes/crypto/index')
-const NewsLetterRoutes = require('./routes/newsletter/index')
-
+console.log('Routes')
 app.use('/', Routes)
-// app.use(`${process.env.API_URL}/reports`, ReportRoutes)
+console.log('ReportRoutes')
+app.use(`${process.env.API_URL}/reports`, ReportRoutes)
+console.log('TokenRoutes')
 app.use(`${process.env.API_URL}/crypto_tokens`, TokenRoutes)
+console.log('NewsLetterRoutes')
 app.use(`${process.env.API_URL}/news-letters`, NewsLetterRoutes)
 
 const cors = require('cors');
