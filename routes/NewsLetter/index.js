@@ -2,7 +2,7 @@ const express = require('express')
 const Router = express.Router()
 const { body, check, validationResult } = require('express-validator');
 
-const NewsLetter = require('../../Models/newsletter')
+const NewsLetter = require('../../models/newsletter')
 
 // SIGN UP FOR NEWSLETTER
 Router.post('/', [
