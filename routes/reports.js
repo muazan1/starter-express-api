@@ -1,6 +1,9 @@
 const express = require('express')
 const Router = express.Router()
 
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
+
 const { check, validationResult } = require('express-validator');
 
 var Report = require('../models/report')
@@ -8,7 +11,7 @@ var nodemailer = require('nodemailer')
 
 // CREATE NEW REPORT
 
-Router.post('/', [
+Router.post('/', jsonParser, [
     check('user_id').not().isEmpty().withMessage("Some Went Wrong").trim(),
 
     check('scam_type').not().isEmpty().withMessage("Please Select Scam Type").trim(),
@@ -138,7 +141,7 @@ Router.get('/:reportId/edit', async (req, res) => {
 });
 
 // UPDATE THE REPORT
-Router.put('/:reportId', [
+Router.put('/:reportId', jsonParser, [
     check('user_id').not().isEmpty().withMessage("Some Went Wrong").trim(),
 
     check('scam_type').not().isEmpty().withMessage("Please Select Scam Type").trim(),

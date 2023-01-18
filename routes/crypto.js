@@ -1,17 +1,22 @@
 const express = require('express')
 const Router = express.Router()
 
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
+
+
 const { body, check, validationResult } = require('express-validator');
 var Crypto = require('../models/crypto');
 
 // CREATE NEW TOKEN
-Router.post('/', [
+Router.post('/', jsonParser, [
     check('crypto_token_name').not().isEmpty().withMessage("Token Name is Required").trim(),
 
     check('crypto_token').not().isEmpty().withMessage("Token is Required").trim(),
 
 ], async (req, res) => {
 
+    console.log(req.body)
     const errors = validationResult(req).formatWith(({ msg }) => msg);
 
     const hasError = !errors.isEmpty()
@@ -58,7 +63,7 @@ Router.get('/', async (req, res) => {
 })
 
 // CHECK FOR THE VALID TOKEN
-Router.post('/check', async (req, res) => {
+Router.post('/check', jsonParser, async (req, res) => {
 
     let data = { crypto_token: req.body.token }
 
@@ -87,7 +92,7 @@ Router.delete('/:tokenId', async (req, res) => {
 })
 
 // UPDATE THE TOKEN
-Router.put('/:tokenId', [
+Router.put('/:tokenId', jsonParser, [
     check('crypto_token_name').not().isEmpty().withMessage("Token Name is Required").trim(),
 
     check('crypto_token').not().isEmpty().withMessage("Token is Required").trim(),

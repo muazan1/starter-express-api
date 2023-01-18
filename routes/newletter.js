@@ -1,12 +1,15 @@
 const express = require('express')
 const Router = express.Router()
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
 
 const { body, check, validationResult } = require('express-validator');
 
 var NewsLetter = require('../models/newsletter')
 
 // SIGN UP FOR NEWSLETTER
-Router.post('/', [
+Router.post('/', jsonParser, [
+
     check('email').not().isEmpty().withMessage("Email is Required").trim(),
 
 ], async (req, res) => {
