@@ -24,10 +24,10 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 app.use(bodyParser.json());
 
 // for routes
-const Routes = require('./routes/index')
-const ReportRoutes = require('./routes/reports/index')
-const TokenRoutes = require('./routes/crypto/index')
-const NewsLetterRoutes = require('./routes/newsletter/index')
+const Routes = require('./routes/index');
+const ReportRoutes = require('./routes/reports/index');
+const TokenRoutes = require('./routes/crypto/index');
+const NewsLetterRoutes = require('./routes/newsletter/index');
 
 app.use('/', Routes)
 app.use(`${process.env.API_URL}/reports`, ReportRoutes)
