@@ -2,7 +2,7 @@ const express = require('express')
 const Router = express.Router()
 
 const { body, check, validationResult } = require('express-validator');
-var Cryptotoken = require('../models/cryptotoken');
+var Crypto = require('../models/crypto');
 
 // CREATE NEW TOKEN
 Router.post('/', [
@@ -26,7 +26,7 @@ Router.post('/', [
     }
 
     try {
-        const crypto = new Cryptotoken(payload)
+        const crypto = new Crypto(payload)
 
         await crypto.save()
 
@@ -48,7 +48,7 @@ Router.get('/', async (req, res) => {
 
         console.log(data)
 
-        const token = await Cryptotoken.find(data)
+        const token = await Crypto.find(data)
 
         res.status(200).json({ type: "success", data: token });
     }
@@ -62,7 +62,7 @@ Router.post('/check', async (req, res) => {
 
     let data = { crypto_token: req.body.token }
 
-    const token = await Cryptotoken.findOne(data)
+    const token = await Crypto.findOne(data)
 
     if (token)
         res.status(200).json({ type: 'success', message: "Token is Valid", data: token });
@@ -77,7 +77,7 @@ Router.delete('/:tokenId', async (req, res) => {
     try {
         const data = req.params.tokenId
 
-        const report = await Cryptotoken.findByIdAndDelete(data)
+        const report = await Crypto.findByIdAndDelete(data)
 
         res.status(200).json({ message: "Token DeletedF Successfully" });
     }
@@ -110,7 +110,7 @@ Router.put('/:tokenId', [
     const data = req.params.tokenId
 
     try {
-        const report = await Cryptotoken.findByIdAndUpdate(data, payload)
+        const report = await Crypto.findByIdAndUpdate(data, payload)
 
         res.status(200).json({ type: "success", message: "Token Updated Successfully" });
     }
@@ -125,7 +125,7 @@ Router.get('/:tokenId/edit', async (req, res) => {
     try {
         const data = req.params.tokenId
 
-        const report = await Cryptotoken.findById(data)
+        const report = await Crypto.findById(data)
 
         res.status(200).json({ data: report });
     }
