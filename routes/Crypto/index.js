@@ -2,7 +2,7 @@ const express = require('express')
 const Router = express.Router()
 
 const { body, check, validationResult } = require('express-validator');
-const CryptoToken = require('../../models/crypto_token');
+const CryptoToken = require('../../models/CryptoToken');
 
 // CREATE NEW TOKEN
 Router.post('/', [
