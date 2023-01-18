@@ -7,4 +7,4 @@ var CryptoTokenSchema = new mongoose.Schema({
     updated: { type: Date, default: Date.now() },
 })
 
-module.exports = mongoose.model("CryptoToken", CryptoTokenSchema)
+module.exports = mongoose.model("Cryptotoken", CryptoTokenSchema)
