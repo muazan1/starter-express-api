@@ -25,9 +25,9 @@ app.use(bodyParser.json());
 
 
 const Routes = require('./routes/index')
-const ReportRoutes = require('./routes/Reports/index')
-const TokenRoutes = require('./routes/Crypto/index')
-const NewsLetterRoutes = require('./routes/NewsLetter/index')
+const ReportRoutes = require('./routes/reports/index')
+const TokenRoutes = require('./routes/cypto/index')
+const NewsLetterRoutes = require('./routes/newsletter/index')
 
 app.use('/', Routes)
 app.use(`${process.env.API_URL}/reports`, ReportRoutes)
