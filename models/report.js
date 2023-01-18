@@ -10,4 +10,5 @@ const ReportSchema = new mongoose.Schema({
 })
 
 // User model
-module.exports = mongoose.model("Report", ReportSchema)
+const Report = mongoose.model("Report", ReportSchema)
+module.exports = Report
