@@ -4,7 +4,6 @@ const Router = express.Router()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
-
 const { body, check, validationResult } = require('express-validator');
 var Crypto = require('../models/crypto');
 
@@ -69,9 +68,13 @@ Router.post('/check', jsonParser, async (req, res) => {
 
     const token = await Crypto.findOne(data)
 
-    if (token)
+    if (token) {
+        let count = parseInt(token.transaction_times) + 1;
+
+        await Crypto.findByIdAndUpdate(token._id, { transaction_times: count })
+
         res.status(200).json({ type: 'success', message: "Token is Valid", data: token });
-    else
+    } else
         res.status(200).json({ type: 'error', message: "Token is not Valid" });
 
 })
@@ -84,7 +87,7 @@ Router.delete('/:tokenId', async (req, res) => {
 
         const report = await Crypto.findByIdAndDelete(data)
 
-        res.status(200).json({ message: "Token DeletedF Successfully" });
+        res.status(200).json({ message: "Token Deleted Successfully" });
     }
     catch (error) {
         res.status(422).json({ error: error });

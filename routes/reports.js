@@ -8,9 +8,10 @@ const { check, validationResult } = require('express-validator');
 
 var Report = require('../models/report')
 var nodemailer = require('nodemailer')
+var Crypto = require('../models/crypto');
+
 
 // CREATE NEW REPORT
-
 Router.post('/', jsonParser, [
     check('user_id').not().isEmpty().withMessage("Some Went Wrong").trim(),
 
@@ -22,7 +23,6 @@ Router.post('/', jsonParser, [
 
 ], async (req, res) => {
 
-    console.log(req.body)
     const errors = validationResult(req).formatWith(({ msg }) => msg);
 
     const hasError = !errors.isEmpty()
@@ -31,11 +31,22 @@ Router.post('/', jsonParser, [
         res.status(422).json({ error: errors.array() });
     }
 
+    const token = await Crypto.findOne({ crypto_token: req.body.bcp_address });
+
+    let count = parseInt(token.reported_times) + 1
+
+    if (token) {
+        await Crypto.findOneAndUpdate({ crypto_token: req.body.bcp_address }, { reported_times: count });
+    } else {
+        res.status(422).json({ type: 'error', message: 'Invalid Token' });
+    }
+
     const payload = {
         user_id: req.body.user_id || 454544668,
         scam_type: req.body.scam_type,
         bcp_address: req.body.bcp_address,
         description: req.body.description,
+        token: token._id
     }
 
     const transporter = nodemailer.createTransport({
@@ -86,7 +97,7 @@ Router.post('/', jsonParser, [
 Router.get('/', async (req, res) => {
 
     try {
-        const reports = await Report.find()
+        const reports = await Report.find().populate('token')
 
         res.status(200).json({ data: reports });
     }
@@ -95,13 +106,28 @@ Router.get('/', async (req, res) => {
     }
 });
 
+// GET LATESER REPORTS
+Router.get('/latest', async (req, res) => {
+
+    try {
+        let data = {}
+
+        const reports = await Report.find(data).limit(5).populate('token')
+
+        res.status(200).json({ data: reports });
+    }
+    catch (error) {
+        res.status(422).json({ error: error });
+    }
+});
 // GET SPECIFIC USER REPORTS
 Router.get('/:userId', async (req, res) => {
 
     try {
         let data = { user_id: req.params.userId }
 
-        const reports = await Report.find(data)
+        const reports = await Report.find(data).populate('token')
+
 
         res.status(200).json({ data: reports });
     }
