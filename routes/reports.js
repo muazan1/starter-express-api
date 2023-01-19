@@ -8,8 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 var Report = require('../models/report')
 var nodemailer = require('nodemailer')
-var Crypto = require('../models/crypto');
-
+var Crypto = require('../models/crypto')
 
 // CREATE NEW REPORT
 Router.post('/', jsonParser, [
@@ -33,9 +32,10 @@ Router.post('/', jsonParser, [
 
     const token = await Crypto.findOne({ crypto_token: req.body.bcp_address });
 
-    let count = parseInt(token.reported_times) + 1
+    // console.log(token == null)
+    if (token != null) {
+        let count = parseInt(token.reported_times) + 1
 
-    if (token) {
         await Crypto.findOneAndUpdate({ crypto_token: req.body.bcp_address }, { reported_times: count });
     } else {
         res.status(422).json({ type: 'error', message: 'Invalid Token' });
@@ -120,6 +120,7 @@ Router.get('/latest', async (req, res) => {
         res.status(422).json({ error: error });
     }
 });
+
 // GET SPECIFIC USER REPORTS
 Router.get('/:userId', async (req, res) => {
 
