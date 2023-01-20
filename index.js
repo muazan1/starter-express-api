@@ -23,11 +23,10 @@ const cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({
-    origin: 'https://wisesama.netlify.app',
     origin: '*',
     methods: ["GET", 'POST', 'PUT', 'DELETE']
 }));
-app.use(helmet({ crossOriginResourcePolicy: false }))
+app.use(helmet())
 
 
 app.listen(port, () => {
