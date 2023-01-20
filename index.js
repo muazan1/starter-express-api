@@ -13,10 +13,6 @@ var ReportRoutes = require('./routes/reports')
 var TokenRoutes = require('./routes/crypto')
 var NewsLetterRoutes = require('./routes/newletter')
 
-app.use('/', Routes)
-app.use(`/api/v1/reports`, ReportRoutes)
-app.use(`/api/v1/crypto_tokens`, TokenRoutes)
-app.use(`/api/v1/news-letters`, NewsLetterRoutes)
 
 const cors = require('cors');
 
@@ -30,6 +26,11 @@ app.options('*', cors());
 // }));
 app.use(helmet())
 
+
+app.use('/', Routes)
+app.use(`/api/v1/reports`, ReportRoutes)
+app.use(`/api/v1/crypto_tokens`, TokenRoutes)
+app.use(`/api/v1/news-letters`, NewsLetterRoutes)
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
