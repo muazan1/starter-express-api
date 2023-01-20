@@ -6,6 +6,7 @@ const express = require('express')
 const app = express()
 const port = process.env.APP_LISTEN_PORT || 8080
 const bodyParser = require('body-parser')
+const helmet = require('helmet')
 
 var Routes = require('./routes/index')
 var ReportRoutes = require('./routes/reports')
@@ -26,7 +27,7 @@ app.use(cors({
     origin: '*',
     methods: ["GET", 'POST', 'PUT']
 }));
-
+app.use(helmet())
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
