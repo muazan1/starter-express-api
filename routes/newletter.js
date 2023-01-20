@@ -19,7 +19,8 @@ Router.post('/', jsonParser, [
     const hasError = !errors.isEmpty()
 
     if (hasError) {
-        res.status(422).json({ error: errors.array() });
+        res.json({ type: 'error', message: errors.array() });
+        return false
     }
 
     const payload = {
@@ -31,10 +32,11 @@ Router.post('/', jsonParser, [
 
         letter.save()
 
-        res.status(201).json({ type: 'success', message: 'News Letter Subscribed' });
+        res.json({ type: 'success', message: 'News Letter Subscribed' });
     }
     catch (error) {
-        res.status(422).json({ type: 'error', message: error });
+        res.json({ type: 'error', message: error });
+        return false
     }
 })
 

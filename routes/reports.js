@@ -6,8 +6,8 @@ const jsonParser = bodyParser.json()
 
 const { check, validationResult } = require('express-validator');
 
-var Report = require('../models/report')
 var nodemailer = require('nodemailer')
+var Report = require('../models/report')
 var Crypto = require('../models/crypto')
 
 // CREATE NEW REPORT
@@ -27,18 +27,20 @@ Router.post('/', jsonParser, [
     const hasError = !errors.isEmpty()
 
     if (hasError) {
-        res.status(422).json({ error: errors.array() });
+        res.json({ type: 'error', message: errors.array() });
+        return false
     }
 
     const token = await Crypto.findOne({ crypto_token: req.body.bcp_address });
 
-    // console.log(token == null)
     if (token != null) {
         let count = parseInt(token.reported_times) + 1
 
         await Crypto.findOneAndUpdate({ crypto_token: req.body.bcp_address }, { reported_times: count });
     } else {
-        res.status(422).json({ type: 'error', message: 'Invalid Token' });
+        res.json({ type: 'error', message: ['Invalid Token'] });
+
+        return false
     }
 
     const payload = {
@@ -71,7 +73,7 @@ Router.post('/', jsonParser, [
         to: 'user1@user.com, user@admin.com',
         subject: 'Your Report has been Submitted',
         text: 'Hello, We Recived your report ',
-        html: '<b>Hey there! </b><br> This is our first message sent with Nodemailer'
+        html: '<b>Hey there! </b><br> We Recieved your Report'
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
