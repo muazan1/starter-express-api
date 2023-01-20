@@ -4,9 +4,11 @@ require('./database/connection')
 
 const express = require('express')
 const app = express()
-const port = process.env.APP_LISTEN_PORT || 8080
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
+const cors = require('cors');
+
+const port = process.env.APP_LISTEN_PORT || 8080
 
 var Routes = require('./routes/index')
 var ReportRoutes = require('./routes/reports')
@@ -14,16 +16,11 @@ var TokenRoutes = require('./routes/crypto')
 var NewsLetterRoutes = require('./routes/newletter')
 
 
-const cors = require('cors');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({ origin: '*' }))
 app.options('*', cors());
-// app.use(cors({
-//     origin: '*',
-//     methods: ["GET", 'POST', 'PUT', 'DELETE']
-// }));
 app.use(helmet())
 
 

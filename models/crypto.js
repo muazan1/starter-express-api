@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Schema for CryptoTokens
 var CryptoTokenSchema = new mongoose.Schema({
     crypto_token_name: { type: String, required: true },
     crypto_token: { type: String, required: true, unique: true },

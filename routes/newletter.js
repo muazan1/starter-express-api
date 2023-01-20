@@ -72,5 +72,4 @@ Router.delete('/:newsLetterID', async (req, res) => {
     }
 })
 
-
 module.exports = Router

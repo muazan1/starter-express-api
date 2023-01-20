@@ -108,7 +108,7 @@ Router.get('/', async (req, res) => {
     }
 });
 
-// GET LATESER REPORTS
+// GET LATEST REPORTS
 Router.get('/latest', async (req, res) => {
 
     try {
@@ -116,7 +116,9 @@ Router.get('/latest', async (req, res) => {
 
         const reports = await Report.find(data).limit(5).populate('token')
 
-        res.status(200).json({ data: reports });
+        const reportCount = await Report.find({}).count();
+
+        res.status(200).json({ data: reports, reportCount: reportCount });
     }
     catch (error) {
         res.status(422).json({ error: error });

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Schema for Reports
 var ReportSchema = new mongoose.Schema({
     user_id: { type: String, required: true },
     scam_type: { type: String, required: true },

@@ -1,11 +1,11 @@
 const express = require('express')
 const Router = express.Router()
 
+var Crypto = require('../models/crypto');
 const bodyParser = require('body-parser')
-const jsonParser = bodyParser.json()
 
 const { body, check, validationResult } = require('express-validator');
-var Crypto = require('../models/crypto');
+const jsonParser = bodyParser.json()
 
 // CREATE NEW TOKEN
 Router.post('/', jsonParser, [
