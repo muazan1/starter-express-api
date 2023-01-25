@@ -9,6 +9,7 @@ const { check, validationResult } = require('express-validator');
 var nodemailer = require('nodemailer')
 var Report = require('../models/report')
 var Crypto = require('../models/crypto')
+var User = require('../models/user')
 
 const IsAuth = require('../middleware/IsAuth')
 
@@ -122,8 +123,9 @@ Router.get('/latest', async (req, res) => {
         const reports = await Report.find(data).limit(5).populate('token')
 
         const reportCount = await Report.find({}).count();
+        const userCount = await User.find({}).count();
 
-        res.status(200).json({ data: reports, reportCount: reportCount });
+        res.status(200).json({ data: reports, reportCount: reportCount, userCount: userCount });
     }
     catch (error) {
         res.status(422).json({ error: error });

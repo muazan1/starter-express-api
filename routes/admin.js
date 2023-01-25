@@ -44,7 +44,7 @@ Router.post('/login', jsonParser, [
 
     var X_TOKEN = jwt.sign({
         admin: admin
-    }, 'nmdsb67f9pknp4lmcnb30h27ub53aate', {
+    }, process.env.JWT_SECRET, {
         expiresIn: 86400
     });
 

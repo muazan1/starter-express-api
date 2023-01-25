@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 var UserSchema = new mongoose.Schema({
     googleId: { type: String, required: false },
     githubId: { type: String, required: false },
+    imageUrl: { type: String, required: false },
     secret: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },

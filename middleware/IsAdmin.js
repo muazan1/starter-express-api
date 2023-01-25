@@ -12,7 +12,7 @@ const IsAdmin = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, 'nmdsb67f9pknp4lmcnb30h27ub53aate');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = decoded;
 

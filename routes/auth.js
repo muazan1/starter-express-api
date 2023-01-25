@@ -18,9 +18,14 @@ const User = require('../models/user')
 const IsAuth = require('../middleware/IsAuth')
 
 
+Router.get('/user', IsAuth, async (req, res) => {
+
+    res.status(200).json({ user: req.user })
+
+})
 Router.get('/check', IsAuth, async (req, res) => {
 
-    res.status(200).json({ message: 'You are Logged In' })
+    res.status(200).json({ message: 'You are Logged In', user: req.user })
 
 })
 

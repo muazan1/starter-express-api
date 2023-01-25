@@ -21,9 +21,9 @@ passport.deserializeUser(function (user, done) {
 })
 
 passport.use(new GitHubStrategy({
-    clientID: '2d8be5690789685e4d2f',
-    clientSecret: '01082dafede7ec0ab1791affa0e1126f0f0fc9cd',
-    callbackURL: "http://localhost:8080/auth/github/callback"
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK
 },
     function (accessToken, refreshToken, profile, done) {
         let authUser = createOrUpdateUser(profile)
@@ -50,10 +50,12 @@ const createOrUpdateUser = async (profile) => {
 
         const hashedPassword = await bcrypt.hash('LaCasaDaPapel12', 10);
 
+
         const payloadData = {
             googleId: '',
             githubId: profile.id,
             secret: profile.id,
+            imageUrl: profile.photos[0].value,
             name: profile.displayName,
             email: profile.username + '@wisesama.com',
             password: hashedPassword,

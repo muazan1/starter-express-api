@@ -21,7 +21,7 @@ Router.get(
 
         var X_TOKEN = jwt.sign({
             user: user
-        }, 'nmdsb67f9pknp4lmcnb30h27ub53aate', {
+        }, process.env.JWT_SECRET, {
             expiresIn: 86400
         });
 
@@ -38,7 +38,7 @@ Router.get('/github/callback',
 
         var X_TOKEN = jwt.sign({
             user: user
-        }, 'nmdsb67f9pknp4lmcnb30h27ub53aate', {
+        }, process.env.JWT_SECRET, {
             expiresIn: 86400
         });
 
