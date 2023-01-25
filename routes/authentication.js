@@ -25,7 +25,7 @@ Router.get(
             expiresIn: 86400
         });
 
-        return res.redirect(`http://localhost:3000?token=${X_TOKEN}`);
+        return res.redirect(`${process.env.FRONTEND_URL}?token=${X_TOKEN}`);
     }
 )
 
@@ -42,7 +42,7 @@ Router.get('/github/callback',
             expiresIn: 86400
         });
 
-        return res.redirect(`http://localhost:3000?token=${X_TOKEN}`);
+        return res.redirect(`${process.env.FRONTEND_URL}?token=${X_TOKEN}`);
     }
 );
 
