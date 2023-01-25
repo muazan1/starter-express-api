@@ -29,6 +29,7 @@ Router.get(
     }
 )
 
+
 Router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/login/failed' }),
     async (req, res) => {
