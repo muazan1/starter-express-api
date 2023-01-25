@@ -3,34 +3,59 @@ console.log('App is Running')
 require('./database/connection')
 
 const express = require('express')
+
 const app = express()
+
 const bodyParser = require('body-parser')
+
 const helmet = require('helmet')
-const cors = require('cors');
+
+const cors = require('cors')
+
 const session = require('express-session')
 
+const passport = require('passport')
+
 const googlePassport = require('./passport/google')
+
 const githubPassport = require('./passport/github')
 
 const port = process.env.APP_LISTEN_PORT || 8080
 
-const passport = require('passport')
-
 var Routes = require('./routes/index')
+
 var ReportRoutes = require('./routes/reports')
+
 var TokenRoutes = require('./routes/crypto')
+
 var NewsLetterRoutes = require('./routes/newletter')
+
 var AuthRoutes = require('./routes/auth')
+
+var UserRoutes = require('./routes/user')
+
+var SystemUserRoutes = require('./routes/systemusers')
+
+var AuthenticationRoutes = require('./routes/authentication')
+
+var AdminRoutes = require('./routes/admin')
+
+const User = require('./models/user')
 
 const { OAuth2Client } = require("google-auth-library");
 
 const jwt = require("jsonwebtoken");
 
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }))
+
 app.use(cors({ origin: '*' }))
+
 app.options('*', cors());
+
 app.use(helmet());
+
 app.use(session({
     secret: 'WisesamaApp',
     resave: false,
@@ -43,51 +68,22 @@ app.use(passport.initialize())
 
 
 app.use('/', Routes)
+
+app.use(`/auth`, AuthenticationRoutes)
+
+app.use(`/api/v1/admin`, AdminRoutes)
+
 app.use(`/api/v1/auth`, AuthRoutes)
+
 app.use(`/api/v1/reports`, ReportRoutes)
+
 app.use(`/api/v1/crypto_tokens`, TokenRoutes)
+
 app.use(`/api/v1/news-letters`, NewsLetterRoutes)
 
+app.use(`/api/v1/users`, UserRoutes)
 
-const sendFront = () => {
-    console.log('On Front side')
-}
-
-app.get(
-    "/auth/google/callback",
-    passport.authenticate("google", {
-        scope: ['email', 'profile'],
-        failureRedirect: "/login/failed",
-    }),
-    function (req, res) {
-        console.log(req)
-        let authUser = req.user
-
-        var X_TOKEN = jwt.sign({
-            username: authUser.displayName
-        }, 'nmdsb67f9pknp4lmcnb30h27ub53aate', {
-            expiresIn: 86400
-        });
-
-        return res.redirect(`http://localhost:3000?token=${X_TOKEN}`);
-    }
-)
-
-app.get('/auth/github/callback',
-    passport.authenticate('github', { failureRedirect: '/login/failed' }),
-    function (req, res) {
-        let authUser = req.user
-
-        var X_TOKEN = jwt.sign({
-            username: authUser.displayName
-        }, 'nmdsb67f9pknp4lmcnb30h27ub53aate', {
-            expiresIn: 86400
-        });
-
-        return res.redirect(`http://localhost:3000?token=${X_TOKEN}`);
-    }
-);
-
+app.use(`/api/v1/system-users`, SystemUserRoutes)
 
 app.get("/login/failed", (req, res) => {
     res.status(401).json({

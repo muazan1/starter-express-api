@@ -6,6 +6,7 @@ const jsonParser = bodyParser.json()
 const { body, check, validationResult } = require('express-validator');
 
 var NewsLetter = require('../models/newsletter')
+const IsAdmin = require('../middleware/IsAdmin')
 
 // SIGN UP FOR NEWSLETTER
 Router.post('/', jsonParser, [
@@ -41,7 +42,7 @@ Router.post('/', jsonParser, [
 })
 
 //  GET ALL NEWS LETTER RECIPENTS
-Router.get('/', async (req, res) => {
+Router.get('/', IsAdmin, async (req, res) => {
     try {
         let data = {}
 
@@ -58,7 +59,7 @@ Router.get('/', async (req, res) => {
 })
 
 // DELETE NEWS LETTER RECIPENT
-Router.delete('/:newsLetterID', async (req, res) => {
+Router.delete('/:newsLetterID', IsAdmin, async (req, res) => {
 
     try {
         const data = req.params.newsLetterID

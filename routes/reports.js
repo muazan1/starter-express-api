@@ -10,9 +10,12 @@ var nodemailer = require('nodemailer')
 var Report = require('../models/report')
 var Crypto = require('../models/crypto')
 
+const IsAuth = require('../middleware/IsAuth')
+
+const IsAdmin = require('../middleware/IsAdmin')
+
 // CREATE NEW REPORT
-Router.post('/', jsonParser, [
-    check('user_id').not().isEmpty().withMessage("Some Went Wrong").trim(),
+Router.post('/', IsAuth, jsonParser, [
 
     check('scam_type').not().isEmpty().withMessage("Please Select Scam Type").trim(),
 
@@ -27,7 +30,7 @@ Router.post('/', jsonParser, [
     const hasError = !errors.isEmpty()
 
     if (hasError) {
-        res.json({ type: 'error', message: errors.array() });
+        res.status(422).json({ type: 'error', message: errors.array() });
         return false
     }
 
@@ -44,7 +47,7 @@ Router.post('/', jsonParser, [
     }
 
     const payload = {
-        user_id: req.body.user_id || 454544668,
+        user_id: req.user.user[0]._id,
         scam_type: req.body.scam_type,
         bcp_address: req.body.bcp_address,
         description: req.body.description,
@@ -70,7 +73,7 @@ Router.post('/', jsonParser, [
 
     var mailOptions = {
         from: '"Wisesama" <admin@admin.com>',
-        to: 'user1@user.com, user@admin.com',
+        to: `${req.user.user[0].email}`,
         subject: 'Your Report has been Submitted',
         text: 'Hello, We Recived your report ',
         html: '<b>Hey there! </b><br> We Recieved your Report'
@@ -96,10 +99,12 @@ Router.post('/', jsonParser, [
 });
 
 // GET ALL REPORTS
-Router.get('/', async (req, res) => {
+Router.get('/', IsAdmin, async (req, res) => {
 
     try {
-        const reports = await Report.find().populate('token')
+        const reports = await Report.find()
+            // .populate('user_id')
+            .populate('token')
 
         res.status(200).json({ data: reports });
     }
@@ -126,13 +131,12 @@ Router.get('/latest', async (req, res) => {
 });
 
 // GET SPECIFIC USER REPORTS
-Router.get('/:userId', async (req, res) => {
+Router.get('/my-reports', IsAuth, async (req, res) => {
 
     try {
-        let data = { user_id: req.params.userId }
+        let data = { user_id: req.user.user[0]._id }
 
         const reports = await Report.find(data).populate('token')
-
 
         res.status(200).json({ data: reports });
     }
@@ -142,7 +146,7 @@ Router.get('/:userId', async (req, res) => {
 });
 
 // DELETE THE REPORT
-Router.delete('/:reportId', async (req, res) => {
+Router.delete('/:reportId', IsAdmin, async (req, res) => {
 
     try {
         const data = req.params.reportId
@@ -157,7 +161,7 @@ Router.delete('/:reportId', async (req, res) => {
 });
 
 // EDIT THE REPORT
-Router.get('/:reportId/edit', async (req, res) => {
+Router.get('/:reportId/edit', IsAdmin, async (req, res) => {
 
     try {
         const data = req.params.reportId
@@ -172,7 +176,7 @@ Router.get('/:reportId/edit', async (req, res) => {
 });
 
 // UPDATE THE REPORT
-Router.put('/:reportId', jsonParser, [
+Router.put('/:reportId', IsAdmin, jsonParser, [
     check('user_id').not().isEmpty().withMessage("Some Went Wrong").trim(),
 
     check('scam_type').not().isEmpty().withMessage("Please Select Scam Type").trim(),

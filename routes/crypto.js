@@ -7,15 +7,16 @@ const bodyParser = require('body-parser')
 const { body, check, validationResult } = require('express-validator');
 const jsonParser = bodyParser.json()
 
+const IsAdmin = require('../middleware/IsAdmin')
+
 // CREATE NEW TOKEN
-Router.post('/', jsonParser, [
+Router.post('/', IsAdmin, jsonParser, [
     check('crypto_token_name').not().isEmpty().withMessage("Token Name is Required").trim(),
 
     check('crypto_token').not().isEmpty().withMessage("Token is Required").trim(),
 
 ], async (req, res) => {
 
-    console.log(req.body)
     const errors = validationResult(req).formatWith(({ msg }) => msg);
 
     const hasError = !errors.isEmpty()
@@ -37,7 +38,7 @@ Router.post('/', jsonParser, [
         res.status(201).json({ type: 'success', message: 'Token Added Successfully' });
     }
     catch (error) {
-        console.log(error.message)
+
         res.status(422).json({ type: 'error', error: error, message: error.message });
     }
 })
@@ -80,7 +81,7 @@ Router.post('/check', jsonParser, async (req, res) => {
 })
 
 // DELETE THE TOKEN
-Router.delete('/:tokenId', async (req, res) => {
+Router.delete('/:tokenId', IsAdmin, async (req, res) => {
 
     try {
         const data = req.params.tokenId
@@ -95,7 +96,7 @@ Router.delete('/:tokenId', async (req, res) => {
 })
 
 // UPDATE THE TOKEN
-Router.put('/:tokenId', jsonParser, [
+Router.put('/:tokenId', IsAdmin, jsonParser, [
     check('crypto_token_name').not().isEmpty().withMessage("Token Name is Required").trim(),
 
     check('crypto_token').not().isEmpty().withMessage("Token is Required").trim(),
@@ -128,7 +129,7 @@ Router.put('/:tokenId', jsonParser, [
 })
 
 // EDIT TOKEN
-Router.get('/:tokenId/edit', async (req, res) => {
+Router.get('/:tokenId/edit', IsAdmin, async (req, res) => {
 
     try {
         const data = req.params.tokenId

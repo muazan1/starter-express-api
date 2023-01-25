@@ -20,10 +20,21 @@ const IsAuth = require('../middleware/IsAuth')
 
 Router.get('/check', IsAuth, async (req, res) => {
 
-    // console.log(req)
-
     res.status(200).json({ message: 'You are Logged In' })
 
+})
+
+// Logout User
+Router.delete('/logout', IsAuth, async (req, res) => {
+    console.log(req.session)
+
+    if (req.session) {
+        req.session.destroy();
+    }
+    // logged out
+    console.log(req.session)
+
+    return res.status(200).json({ message: "Logged Out" })
 })
 
 // Router.post('/github/login', async (req, res, next) => {

@@ -64,9 +64,6 @@ const createOrUpdateUser = async (profile) => {
 
         return newUser;
 
-
     }
 
 }
-
-
