@@ -40,6 +40,8 @@ var AuthenticationRoutes = require('./routes/authentication')
 
 var AdminRoutes = require('./routes/admin')
 
+var ApiTokenRoutes = require('./routes/apitoken')
+
 const User = require('./models/user')
 
 const { OAuth2Client } = require("google-auth-library");
@@ -84,6 +86,8 @@ app.use(`/api/v1/news-letters`, NewsLetterRoutes)
 app.use(`/api/v1/users`, UserRoutes)
 
 app.use(`/api/v1/system-users`, SystemUserRoutes)
+
+app.use('/api/v1/api-token', ApiTokenRoutes)
 
 app.get("/login/failed", (req, res) => {
     res.status(401).json({
