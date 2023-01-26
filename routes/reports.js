@@ -104,7 +104,7 @@ Router.get('/', IsAdmin, async (req, res) => {
 
     try {
         const reports = await Report.find()
-            // .populate('user_id')
+            .populate('user_id')
             .populate('token')
 
         res.status(200).json({ data: reports });
