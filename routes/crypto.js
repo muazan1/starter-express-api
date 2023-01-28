@@ -39,7 +39,7 @@ Router.post('/', IsAdmin, jsonParser, [
     }
     catch (error) {
 
-        res.status(422).json({ type: 'error', error: error, message: error.message });
+        res.status(422).json({ type: 'error', error: error, message: error.code === 11000 ? 'Token Already Exist' : error.message });
     }
 })
 

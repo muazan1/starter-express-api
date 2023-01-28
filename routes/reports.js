@@ -15,6 +15,7 @@ const IsAuth = require('../middleware/IsAuth')
 
 const IsAdmin = require('../middleware/IsAdmin')
 
+
 // CREATE NEW REPORT
 Router.post('/', IsAuth, jsonParser, [
 
@@ -35,32 +36,33 @@ Router.post('/', IsAuth, jsonParser, [
         return false
     }
 
-    const token = await Crypto.findOne({ crypto_token: req.body.bcp_address });
+    // const token = await Crypto.findOne({ crypto_token: req.body.bcp_address });
 
-    if (token != null) {
-        let count = parseInt(token.reported_times) + 1
+    // if (token != null) {
+    //     let count = parseInt(token.reported_times) + 1
 
-        await Crypto.findOneAndUpdate({ crypto_token: req.body.bcp_address }, { reported_times: count });
-    } else {
-        res.json({ type: 'error', message: ['Invalid Token'] });
+    //     await Crypto.findOneAndUpdate({ crypto_token: req.body.bcp_address }, { reported_times: count });
+    // }
+    //  else {
+    //     res.json({ type: 'error', message: ['Invalid Token'] });
 
-        return false
-    }
+    //     return false
+    // }
 
-    const payload = {
-        user_id: req.user.user[0]._id,
-        scam_type: req.body.scam_type,
-        bcp_address: req.body.bcp_address,
-        description: req.body.description,
-        token: token._id
-    }
+    // const payload = {
+    //     user_id: req.user.user[0]._id,
+    //     scam_type: req.body.scam_type,
+    //     bcp_address: req.body.bcp_address,
+    //     description: req.body.description,
+    //     token: token._id
+    // }
 
     const transporter = nodemailer.createTransport({
         host: "smtp.mailtrap.io",
-        port: 2525,
+        port: process.env.MAILTRAP_PORT,
         auth: {
-            user: "4011bd5e658710",
-            pass: "fa3c51cf80ff5a"
+            user: process.env.MAILTRAP_USER,
+            pass: process.env.MAILTRAP_PASSWORD
         }
     });
 
@@ -72,12 +74,82 @@ Router.post('/', IsAuth, jsonParser, [
         }
     });
 
+
     var mailOptions = {
         from: '"Wisesama" <admin@admin.com>',
         to: `${req.user.user[0].email}`,
         subject: 'Your Report has been Submitted',
         text: 'Hello, We Recived your report ',
-        html: '<b>Hey there! </b><br> We Recieved your Report'
+        html: `<div style="background-color:#191a1c;margin:0;padding:3%;width:100%">
+                <table border="0" cellpadding="0" cellspacing="0" height="100%" class="m_-505009148846401985wrapper-table"
+                    style="margin:auto;max-width:550px;width:100%;background-color: #232529;">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="top">
+                                <div id="m_-505009148846401985template_header_image" style="width:100%"> </div>
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                    id="m_-505009148846401985template_container">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" valign="top">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                                    id="m_-505009148846401985template_header"
+                                                    style="color:#ffffff;border-bottom:0;font-weight:bold;line-height:100%;vertical-align:middle;font-family:Arial,Helvetica,sans-serif">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td id="m_-505009148846401985header_wrapper"
+                                                                style="padding:22px 24px;display:block; text-align: center;margin-top: 15px;">
+                                                                <img style="height: 40px; text-align: center;"
+                                                                    src="https://i.ibb.co/8dV4ZSq/download.png" alt="Logo">
+                                                                <div
+                                                                    style="background: linear-gradient(0deg, #40b6ff, #01ecf8);height: 1px;width: 80%;margin: 20px auto 0 auto;">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" valign="top">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                                    id="m_-505009148846401985template_body">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="top" id="m_-505009148846401985body_content">
+                                                                <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td valign="top" style="padding:0px 27px 27px 27px">
+                                                                                <div id="m_-505009148846401985body_content_inner"
+                                                                                    style="width:80%;margin:0 auto;color:#66696d;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:150%;text-align:left">
+                                                                                    <p style="margin: 0;font-size: 17px;">Hello ${req.user.user[0].name},</p>
+                                                                                    <p style="margin-top: -5px;font-size: 17px;">
+                                                                                        We have recieved your Report.
+                                                                                    </p>
+                                                                                    <p style="margin-top: -17px;font-size: 17px;">
+                                                                                        Thank You.                                                               
+                                                                                    </p>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -88,9 +160,9 @@ Router.post('/', IsAuth, jsonParser, [
     });
 
     try {
-        const report = await new Report(payload)
+        // const report = await new Report(payload)
 
-        report.save()
+        // report.save()
 
         res.status(201).json({ type: 'success', message: 'Report Submitted Successfully' });
     }

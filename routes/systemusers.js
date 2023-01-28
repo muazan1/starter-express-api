@@ -1,13 +1,17 @@
 const express = require('express')
+
 const Router = express.Router()
 
 const bodyParser = require('body-parser')
+
 const jsonParser = bodyParser.json()
 
 const { check, validationResult } = require('express-validator');
 
 var nodemailer = require('nodemailer')
+
 var User = require('../models/user')
+
 var Crypto = require('../models/crypto')
 
 const IsAuth = require('../middleware/IsAuth')
@@ -17,7 +21,6 @@ const IsAdmin = require('../middleware/IsAdmin')
 const Admin = require('../models/admin')
 
 const bcrypt = require('bcryptjs')
-
 
 // GET ALL REPORTS
 Router.get('/', IsAdmin, async (req, res) => {
