@@ -1,13 +1,22 @@
 const express = require('express')
+
 const Router = express.Router()
 
 var Crypto = require('../models/crypto');
+
+var Polka = require('../models/polka')
+
 const bodyParser = require('body-parser')
 
 const { body, check, validationResult } = require('express-validator');
+
 const jsonParser = bodyParser.json()
 
 const IsAdmin = require('../middleware/IsAdmin')
+
+const https = require('https');
+
+const axios = require('axios')
 
 // CREATE NEW TOKEN
 Router.post('/', IsAdmin, jsonParser, [
@@ -67,12 +76,16 @@ Router.post('/check', jsonParser, async (req, res) => {
 
     let data = { crypto_token: req.body.token }
 
-    const token = await Crypto.findOne(data)
+    var token = await Crypto.findOne(data)
+
+    if (token == null) {
+        token = await Polka.findOne({ token: req.body.token })
+    }
 
     if (token) {
-        let count = parseInt(token.transaction_times) + 1;
+        // let count = parseInt(token.transaction_times) + 1;
 
-        await Crypto.findByIdAndUpdate(token._id, { transaction_times: count })
+        // await Crypto.findByIdAndUpdate(token._id, { transaction_times: count })
 
         res.status(200).json({ type: 'success', message: "Token is Valid", data: token });
     } else
@@ -143,4 +156,41 @@ Router.get('/:tokenId/edit', IsAdmin, async (req, res) => {
     }
 })
 
+// UPDATE POLKADOT TOKENS
+Router.get('/updatePolkaDotTokens', IsAdmin, async (req, res) => {
+
+    const response = await axios.get('https://raw.githubusercontent.com/polkadot-js/phishing/master/address.json')
+
+    const responseData = (response.data)
+
+    let allKeys = Object.getOwnPropertyNames(responseData)
+
+    var allTokens = []
+
+    await Polka.remove({})
+
+    allKeys.forEach((item) => {
+
+        responseData[item].forEach((token) => {
+            allTokens.push({ 'token': token })
+        })
+
+    })
+
+    await Polka.insertMany(allTokens)
+
+    res.status(200).json({ message: 'updated' })
+
+});
+
+// GET ALL POLKA TOKENS
+Router.get('/polka-tokens', IsAdmin, async (req, res) => {
+
+    const tokens = await Polka.find({})
+
+    res.status(200).json({ data: tokens })
+
+})
+
+// modules export
 module.exports = Router
