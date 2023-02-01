@@ -82,12 +82,22 @@ Router.post('/check', jsonParser, async (req, res) => {
         token = await Polka.findOne({ token: req.body.token })
     }
 
+    const tokenInfo = await axios.get(`https://api.dirtyhash.com/query/${req.body.token}`);
+    // const tokenInfo = await axios.get(`https://api.dirtyhash.com/query/15LmfYr1UwK9ghjn5cNYoBmApaiWGFNnhBdm6nQF87vY2AcV`);
+
+    console.log(tokenInfo)
+
     if (token) {
         // let count = parseInt(token.transaction_times) + 1;
 
         // await Crypto.findByIdAndUpdate(token._id, { transaction_times: count })
 
-        res.status(200).json({ type: 'success', message: "Token is Valid", data: token });
+        res.status(200).json({
+            type: 'success',
+            message: "Token is Valid",
+            data: token,
+            tokenInfo: tokenInfo.data
+        });
     } else
         res.status(200).json({ type: 'error', message: "Token is not Valid" });
 
